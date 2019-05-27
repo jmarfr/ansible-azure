@@ -1,2 +1,6 @@
 ---
 # defaults file for azurerm_resource_group
+
+location: westeurope
+delete: False
+delete_rg: False

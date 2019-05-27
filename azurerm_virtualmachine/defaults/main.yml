@@ -1,2 +1,19 @@
 ---
 # defaults file for azurerm_virtualmachine
+
+vm_version: latest
+vm_pub_ip: Disabled
+vm_os_disk_type: Premium_LRS
+vm_size: Standard_DS2_v2
+os_disk_size: 32
+vm_admin_username: azureuser
+vm_admin_password: MySup3rP@ssW0rd!
+
+lb_name: None
+lb_backend_pool_name: backendaddrpool0
+
+delete: false
+delete_vm: false
+
+avset_fault_domains: 3
+avset_update_domains: 5

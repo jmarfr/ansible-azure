@@ -1,1 +1,20 @@
 ---
+
+- hosts: localhost
+  connection: local
+
+  vars:
+    rg_name: RG_JMA-test-ansible_20190527
+    location: westeurope
+    vm_offer: CentOS
+    vm_publisher: OpenLogic
+    vm_sku: 7.6
+
+
+  roles:
+    - {role: azurerm_resource_group }
+    - {role: azurerm_virtualnetwork, address_prefixes_cidr: [192.168.0.0/16], vnet_name: "JMA-VNET-1"}
+    - {role: azurerm_subnets, subnets: [{name: "subnet1", cidr: "192.168.1.0/24"},{name: "subnet2", cidr: "192.168.2.0/24"}]}
+    - {role: azurerm_loadbalancer, lb_name: "jma-test-lb"}
+    - {role: azurerm_virtualmachine, vm_name: jma-ansible-test-1, vm_subnet: subnet1, vnet_name: "JMA-VNET-1", lb_name: "jma-test-lb", lb_backend_pool_name: "backendaddrpool0", avset_name: "myavset"}
+    - {role: azurerm_virtualmachine, vm_name: jma-ansible-test-2, vm_subnet: subnet1, vnet_name: "JMA-VNET-1", lb_name: "jma-test-lb", lb_backend_pool_name: "backendaddrpool0", avset_name: "myavset"}
