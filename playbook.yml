@@ -12,9 +12,9 @@
 
 
   roles:
-    - {role: azurerm_resource_group }
-    - {role: azurerm_virtualnetwork, address_prefixes_cidr: [192.168.0.0/16], vnet_name: "JMA-VNET-1"}
-    - {role: azurerm_subnets, subnets: [{name: "subnet1", cidr: "192.168.1.0/24"},{name: "subnet2", cidr: "192.168.2.0/24"}]}
-    - {role: azurerm_loadbalancer, lb_name: "jma-test-lb"}
-    - {role: azurerm_virtualmachine, vm_name: jma-ansible-test-1, vm_subnet: subnet1, vnet_name: "JMA-VNET-1", lb_name: "jma-test-lb", lb_backend_pool_name: "backendaddrpool0", avset_name: "myavset"}
-    - {role: azurerm_virtualmachine, vm_name: jma-ansible-test-2, vm_subnet: subnet1, vnet_name: "JMA-VNET-1", lb_name: "jma-test-lb", lb_backend_pool_name: "backendaddrpool0", avset_name: "myavset"}
+    - {role: ansible-arm-rg }
+    - {role: ansible-arm-vnet, address_prefixes_cidr: [192.168.0.0/16], vnet_name: "JMA-VNET-1"}
+    - {role: ansible-arm-subnet, subnets: [{name: "subnet1", cidr: "192.168.1.0/24"},{name: "subnet2", cidr: "192.168.2.0/24"}]}
+    - {role: ansible-arm-lb, lb_name: "jma-test-lb"}
+    - {role: ansible-arm-vm, vm_name: jma-ansible-test-1, vm_subnet: subnet1, vnet_name: "JMA-VNET-1", lb_name: "jma-test-lb", lb_backend_pool_name: "backendaddrpool0", avset_name: "myavset"}
+    - {role: ansible-arm-vm, vm_name: jma-ansible-test-2, vm_subnet: subnet1, vnet_name: "JMA-VNET-1", lb_name: "jma-test-lb", lb_backend_pool_name: "backendaddrpool0", avset_name: "myavset"}
