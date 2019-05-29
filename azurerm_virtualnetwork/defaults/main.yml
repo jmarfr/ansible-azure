@@ -1,5 +1,0 @@
----
-# defaults file for azurerm_virtualnetwork
-
-delete: False
-delete_vnet: False
