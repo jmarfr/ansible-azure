@@ -5,3 +5,4 @@
 - src: https://github.com/jmarfr/ansible-arm-vm
 - src: https://github.com/jmarfr/ansible-arm-rg
 - src: https://github.com/jmarfr/ansible-arm-lb
+- src: https://github.com/jmarfr/ansible-arm-appgw

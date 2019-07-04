@@ -10,7 +10,57 @@
     vm_publisher: OpenLogic
     vm_sku: 7.6
 
+    appgw_frontend_ports: 
+      - port: 80
+        name: test_appgw_frontend_port
+      - port: 8080
+        name: test_appgw_frontend_port_8080
 
+    appgw_frontend_ip_configurations:
+      - subnet:
+          id: "{{ subnet_id }}"
+        name: "{{ appgw_name }}_frontend_ip"
+        private_ip_allocation_method: "dynamic"
+
+    appgw_backend_address_pools:
+      - backend_addresses:
+          - ip_address: "{{ vm_ips.get('jma-ansible-test-1') }}"
+          - ip_address: "{{ vm_ips.get('jma-ansible-test-2') }}"
+
+        name: "{{ appgw_name }}_backend_address_pool_1"
+
+    appgw_backend_http_settings:
+      - port: 80
+        protocol: http
+        cookie_based_affinity: enabled
+        name: "{{ appgw_name }}_appgateway_http_settings"
+
+    appgw_http_listeners:
+      - frontend_ip_configuration: "{{ appgw_name }}_frontend_ip"
+        frontend_port: "{{ appgw_name }}_frontend_port"
+        name: "{{ appgw_name }}_http_listener"
+
+    appgw_request_routing_rules:
+      - rule_type: Basic
+        backend_address_pool: "{{ appgw_name }}_backend_address_pool_1"
+        backend_http_settings: "{{ appgw_name }}_appgateway_http_settings"
+        http_listener: "{{ appgw_name }}_http_listener"
+        name: "{{ appgw_name }}_rule1"
+
+    appgw_probes:
+      - name: "{{ appgw_name }}_probe_80"
+        host: myhostname.com
+        interval: 5
+        path: /
+        protocol: http
+        timeout: 60
+        unhealthy_threshold: 5
+
+
+
+# Be careful with the order of roles.
+# This is not Terraform. Each linked resource must exists before created the depending resource.
+# Example : LB must be created before attaching vms to.
   roles:
     - {role: ansible-arm-rg }
     - {role: ansible-arm-vnet, address_prefixes_cidr: [192.168.0.0/16], vnet_name: "JMA-VNET-1"}
@@ -18,3 +68,8 @@
     - {role: ansible-arm-lb, lb_name: "jma-test-lb"}
     - {role: ansible-arm-vm, vm_name: jma-ansible-test-1, vm_subnet: subnet1, vnet_name: "JMA-VNET-1", lb_name: "jma-test-lb", lb_backend_pool_name: "backendaddrpool0", avset_name: "myavset"}
     - {role: ansible-arm-vm, vm_name: jma-ansible-test-2, vm_subnet: subnet1, vnet_name: "JMA-VNET-1", lb_name: "jma-test-lb", lb_backend_pool_name: "backendaddrpool0", avset_name: "myavset"}
+    - {role: ansible-arm-appgw, vnet_name: "JMA-VNET-1", subnet_name: "subnet2", appgw_name: "test_appgw"}
+
+  # tasks:
+  #   - debug:
+  #       var: vm_ips.get('jma-ansible-test-1')
